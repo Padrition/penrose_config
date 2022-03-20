@@ -50,8 +50,8 @@ fn main() -> Result<()> {
         // Windows with a matching WM_CLASS will always float
         .floating_classes(vec!["dmenu", "dunst", "polybar"])
         // Client border colors are set based on X focus
-        .focused_border("#cc241d")?
-        .unfocused_border("#3c3836")?;
+        .focused_border("#49404e")?
+        .unfocused_border("#2f1e29")?;
 
     // When specifying a layout, most of the time you will want LayoutConf::default() as shown
     // below, which will honour gap settings and will not be run on focus changes (only when
@@ -68,10 +68,8 @@ fn main() -> Result<()> {
     let n_main = 1;
 
     // Default percentage of the screen to fill with the main area of the layout
-    let ratio = 0.6;
+    let ratio = 0.5;
 
-    // Layouts to be used on each workspace. Currently all workspaces have the same set of Layouts
-    // available to them, though they track modifications to n_main and ratio independently.
     config_builder.layouts(vec![
         Layout::new("[side]", LayoutConf::default(), side_stack, n_main, ratio),
         Layout::new("[botm]", LayoutConf::default(), bottom_stack, n_main, ratio),
@@ -82,7 +80,6 @@ fn main() -> Result<()> {
     // Now build and validate the config
     let config = config_builder.build().unwrap();
 
-    // NOTE: change these to programs that you have installed!
     let my_program_launcher = "dmenu_run";
     let my_file_manager = "thunar";
     let my_terminal = "alacritty";
@@ -130,8 +127,8 @@ fn main() -> Result<()> {
      */
     let key_bindings = gen_keybindings! {
         // Program launch
-        "M-semicolon" => run_external!(my_program_launcher);
-        "M-Return" => run_external!(my_terminal);
+        "M-Return" => run_external!(my_program_launcher);
+        "M-t" => run_external!(my_terminal);
         "M-f" => run_external!(my_file_manager);
 
         // client management
@@ -139,7 +136,7 @@ fn main() -> Result<()> {
         "M-k" => run_internal!(cycle_client, Backward);
         "M-S-j" => run_internal!(drag_client, Forward);
         "M-S-k" => run_internal!(drag_client, Backward);
-        "M-S-q" => run_internal!(kill_client);
+        "M-q" => run_internal!(kill_client);
         "M-S-f" => run_internal!(toggle_client_fullscreen, &Selector::Focused);
         "M-slash" => sp.toggle();
 
