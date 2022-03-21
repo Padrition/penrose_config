@@ -84,6 +84,11 @@ fn main() -> Result<()> {
     let my_file_manager = "thunar";
     let my_terminal = "alacritty";
 
+    let nitrogen = "nitrogen --restore";
+
+    // Section to state programs that to be run at start
+    spawn!(nitrogen)?;
+    
     /* hooks
      *
      * penrose provides several hook points where you can run your own code as part of
