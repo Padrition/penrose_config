@@ -87,9 +87,11 @@ fn main() -> Result<()> {
     let my_terminal = "alacritty";
 
     let nitrogen = "nitrogen --restore";
+    let picom = "picom -b";
 
     // Section to state programs that to be run at start
     spawn!(nitrogen)?;
+    spawn!(picom)?;
 
     //Bar
     let height = 18;
