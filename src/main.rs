@@ -17,13 +17,15 @@ use penrose::{
         xconnection::{XConn, Xid},
     },
     logging_error_handler,
-    xcb::{XcbConnection, XcbHooks},
+    xcb::{XcbDraw,XcbConnection, XcbHooks},
     Backward, Forward, Less, More, Result,
+    draw::{Color, dwm_bar, TextStyle},
 };
 
 use simplelog::{LevelFilter, SimpleLogger};
 use std::collections::HashMap;
 use tracing::info;
+use std::convert::TryFrom;
 
 // An example of a simple custom hook. In this case we are creating a NewClientHook which will
 // be run each time a new client program is spawned.
@@ -88,6 +90,20 @@ fn main() -> Result<()> {
 
     // Section to state programs that to be run at start
     spawn!(nitrogen)?;
+
+    //Bar
+    let height = 18;
+    let BLACK = "#282828";
+    let WHITE = "#ebdbb2";
+    let GRAY = "#3c3836";
+    let BLUE = "#458588";
+    let style = TextStyle{
+        font: "mono".to_string(),
+        point_size: 11,
+        fg: Color::try_from(WHITE)?,
+        bg: Some(Color::try_from(BLACK)?),
+        padding: (0.2,0.2),
+    };
     
     /* hooks
      *
@@ -105,6 +121,15 @@ fn main() -> Result<()> {
     let sp = Scratchpad::new("st", 0.8, 0.8);
 
     let hooks: XcbHooks = vec![
+        Box::new(dwm_bar(
+            XcbDraw::new()?, 
+            height,
+            &style,
+            Color::try_from(BLUE)?,
+            Color::try_from(GRAY)?,
+            config.workspaces().clone(),
+        )?),
+
         Box::new(MyClientHook {}),
         // Using a simple contrib hook that takes no config. By convention, contrib hooks have a 'new'
         // method that returns a boxed instance of the hook with any configuration performed so that it
